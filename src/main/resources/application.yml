@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: gluns-spring
+  main:
+    web-application-type: reactive
+    
+# ------------------------ Logging ------------------------
+logging:
+  level:
+    org.springframework.security: info # trace | debug | info | warn | error | fatal | off
+    org.springframework.cloud.gateway: info
+    org.springframework.boot: info
+    com.netflix.eureka: OFF
+    com.netflix.discovery: OFF

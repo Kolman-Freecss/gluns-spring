@@ -14,22 +14,32 @@
     <packaging>war</packaging>
     <name>gluns-spring</name>
     <description>gluns-spring</description>
-    <url/>
+
     <licenses>
-        <license/>
+        <license>
+            <name>Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</name>
+            <url>https://creativecommons.org/licenses/by-nc-nd/4.0/</url>
+        </license>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <id>gluns</id>
+            <name>gluns</name>
+            <url>https://github.com/Kolman-Freecss/gluns-spring</url>
+        </developer>
     </developers>
     <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
+        <connection>scm:git:https://github.com/Kolman-Freecss/gluns-spring.git</connection>
+        <developerConnection>scm:git:https://github.com/Kolman-Freecss/gluns-spring.git
+        </developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/Kolman-Freecss/gluns-spring.git</url>
     </scm>
+
     <properties>
         <java.version>23</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,11 +59,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
@@ -63,6 +68,34 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+        </dependency>
+
+        <!-- Webflux -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!-- AOP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
