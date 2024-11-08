@@ -39,7 +39,6 @@ services:
         - "8080:8080"
       depends_on:
         - keycloak_db
-        
   keycloak_db:
     build:
       context: ./keycloak_db
