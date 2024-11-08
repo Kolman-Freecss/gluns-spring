@@ -1,5 +1,7 @@
 package org.gluns.glunsspring.domain.model;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+
 /**
  * ChatContext
  * Used to define the ChatContext object.

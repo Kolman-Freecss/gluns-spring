@@ -1,6 +1,5 @@
 package org.gluns.glunsspring.application.ports;
 
-import org.gluns.glunsspring.domain.dto.ChatMessageDto;
 import org.gluns.glunsspring.domain.model.ChatMessage;
 import reactor.core.publisher.Mono;
 
@@ -16,6 +15,10 @@ public interface ChatRepositoryPort {
     
     Mono<ChatMessage> create(final ChatMessage chatMessageDto);
     
+    Mono<ChatMessage> update(final ChatMessage chatMessageDto);
+    
     Mono<Optional<ChatMessage>> findById(final Long id);
+    
+    Mono<Optional<ChatMessage>> findLastByHistoryId(final Long historyId);
     
 }

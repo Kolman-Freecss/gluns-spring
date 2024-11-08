@@ -16,23 +16,23 @@ import java.util.Optional;
 @AllArgsConstructor
 @Repository("chatHibernateRepositoryPortImpl")
 public class ChatHibernateRepositoryPortImpl implements ChatRepositoryPort {
-    
+
     private final ChatHibernateRepository chatHibernateRepository;
-    
+
     /**
      * Get all messages.
      * Find first messages from the database.
-     * 
-     * @return Mono<List<ChatMessage>>
+     *
+     * @return Mono<List < ChatMessage>>
      */
     public Mono<List<ChatMessage>> findAll() {
         return Mono.fromCallable(this.chatHibernateRepository::findFirstMessages)
                 .subscribeOn(Schedulers.boundedElastic());
     }
-    
+
     /**
      * Save message.
-     * 
+     *
      * @param chatMessage
      * @return Mono<ChatMessage>
      */
@@ -42,13 +42,35 @@ public class ChatHibernateRepositoryPortImpl implements ChatRepositoryPort {
     }
     
     /**
+     * Update message.
+     *
+     * @param chatMessage
+     * @return Mono<ChatMessage>
+     */
+    public Mono<ChatMessage> update(final ChatMessage chatMessage) {
+        return Mono.fromCallable(() -> this.chatHibernateRepository.save(chatMessage))
+                .subscribeOn(Schedulers.boundedElastic());
+    }
+
+    /**
      * Get message by id.
-     * 
+     *
      * @param id
      * @return Mono<ChatMessage>
      */
     public Mono<Optional<ChatMessage>> findById(final Long id) {
-        return Mono.fromCallable(() -> this.chatHibernateRepository.findById(id))
+        return Mono.fromCallable(() -> Optional.ofNullable(this.chatHibernateRepository.findAllMessagesByChatMessageId(id)))
+                .subscribeOn(Schedulers.boundedElastic());
+    }
+
+    /**
+     * Find last by history Id.
+     *
+     * @param historyId
+     * @return Mono<ChatMessage>
+     */
+    public Mono<Optional<ChatMessage>> findLastByHistoryId(final Long historyId) {
+        return Mono.fromCallable(() -> Optional.ofNullable(this.chatHibernateRepository.findLastMessageByChatHistoryId(historyId)))
                 .subscribeOn(Schedulers.boundedElastic());
     }
 }

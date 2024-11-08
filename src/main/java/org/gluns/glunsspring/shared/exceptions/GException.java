@@ -24,6 +24,13 @@ public class GException extends RuntimeException {
     }
     
     public GException(final String message, 
+                       final HttpStatus httpStatus) {
+        super(message);
+        this.httpStatus = httpStatus;
+        this.apiMessage = message;
+    }
+    
+    public GException(final String message, 
                        final Throwable cause,
                        final HttpStatus httpStatus) {
         super(message, cause);

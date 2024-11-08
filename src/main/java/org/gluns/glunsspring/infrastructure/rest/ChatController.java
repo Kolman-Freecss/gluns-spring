@@ -28,11 +28,11 @@ public class ChatController extends BaseController {
 
     private final ChatService chatService;
     
-    @Operation(summary = "Get all message chats", description = "Get all message chats")
-    @ApiResponse(responseCode = "200", description = "Message chats retrieved successfully")
+    @Operation(summary = "Get history of all the chat messages", description = "It pulls all the first messages of all the chat histories")
+    @ApiResponse(responseCode = "200", description = "History chat messages retrieved successfully")
     @ApiResponse(responseCode = "500", description = "Error retrieving message chats")
     @GetMapping("/")
-    public Mono<ResponseEntity<ResponseWrapper<List<ChatMessageDto>>>> findAll() {
+    public Mono<ResponseEntity<ResponseWrapper<List<ChatMessageDto>>>> getHistoryChatMessages() {
         return handleOperation(this.chatService.findAll(),
                 HttpStatus.OK,
                 "Message chats retrieved successfully");
@@ -46,6 +46,16 @@ public class ChatController extends BaseController {
         return handleOperation(this.chatService.requestAnswer(chatMessageDto),
                 HttpStatus.CREATED,
                 "User request an answer");
+    }
+    
+    @Operation(summary = "Retrieve all messages by chat history id", description = "Retrieve all messages by the parent chat history id")
+    @ApiResponse(responseCode = "200", description = "Chat messages found")
+    @ApiResponse(responseCode = "500", description = "Error finding chat messages")
+    @GetMapping("/{chatMessageId}")
+    public Mono<ResponseEntity<ResponseWrapper<ChatMessageDto>>> findAllChatMessagesByChatHistoryId(@PathVariable final long chatMessageId) {
+        return handleOperation(this.chatService.findById(chatMessageId),
+                HttpStatus.OK,
+                "Chat messages found");
     }
     
 
