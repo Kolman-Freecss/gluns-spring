@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Enviroment ###
+.env
+
+### Database Client ###
+database_client/sessions/

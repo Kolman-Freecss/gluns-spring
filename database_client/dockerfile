@@ -1,0 +1,5 @@
+# Use the official Adminer base image
+FROM dpage/pgadmin4
+
+# Expose Adminer's default port
+EXPOSE 80

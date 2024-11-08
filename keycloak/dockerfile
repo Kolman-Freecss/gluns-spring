@@ -1,0 +1,11 @@
+# Use the official Keycloak image
+FROM quay.io/keycloak/keycloak:21.1.1
+
+# Create a working directory
+WORKDIR /opt/keycloak
+
+# Initialize the database and start Keycloak in development mode
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev"]
+
+# Expose default Keycloak ports
+EXPOSE 8080

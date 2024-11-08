@@ -1,0 +1,8 @@
+# Use the official PostgreSQL image
+FROM postgres:15.3
+
+# Expose PostgreSQL port
+EXPOSE 5432
+
+# Command to run PostgreSQL
+CMD ["postgres"]

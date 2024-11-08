@@ -1,0 +1,40 @@
+services:
+  keycloak:
+      build:
+        context: ./keycloak
+      environment:
+        KEYCLOAK_ADMIN: ${KEYCLOAK_USER}
+        KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+        KC_DB: ${KEYCLOAK_DB_VENDOR}
+        KC_DB_URL: jdbc:postgresql://keycloak_db/${POSTGRES_DB}
+        KC_DB_USERNAME: ${POSTGRES_USER}
+        KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      ports:
+        - "8080:8080"
+      depends_on:
+        - keycloack_db
+  keycloak_db:
+    build:
+      context: ./keycloack_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  pgadmin4:
+    build:
+      context: ./database_client
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 80:80
+    volumes:
+      - ./database_client/sessions:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
