@@ -16,7 +16,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-        
+
 server:
   port: 8083
 
@@ -30,7 +30,7 @@ springdoc:
   api-docs:
     path: /v3/api-docs
     enabled: true
-    
+
 # ------------------------ Logging ------------------------
 logging:
   level:
@@ -39,3 +39,17 @@ logging:
     org.springframework.boot: info
     com.netflix.eureka: OFF
     com.netflix.discovery: OFF
+    org.gluns.glunsspring.infrastructure.adapters.out.keycloak: debug
+
+# ------------------------ keycloak ------------------------
+keycloak:
+  realm: realm-test
+  base-uri: ${KEYCLOACK_SERVER:http://localhost:8080/realms/${keycloak.realm}}
+  jwk-set-uri: ${keycloak.base-uri}/protocol/openid-connect/certs
+  certs-id: ${KEYCLOACK_REAL_ID:5pzY9Px9dJFUtHDTQHLKrggQidd4p1IbEfSM6e8aZwY}
+  token-uri: ${keycloak.base-uri}/protocol/openid-connect/token
+  user-info-uri: ${keycloak.base-uri}/protocol/openid-connect/userinfo
+  logout: ${keycloak.base-uri}/protocol/openid-connect/logout
+  client-id: front-gluns-app
+  authorization-grant-type: password
+  authorization-grant-type-refresh: refresh_token
