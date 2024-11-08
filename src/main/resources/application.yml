@@ -3,14 +3,31 @@ spring:
     name: gluns-spring
   main:
     web-application-type: reactive
-    
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_gluns-spring-service
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        
 # -------------- OpenAPI --------------
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+    syntax-highlight:
+      theme: agate
+    try-it-out-enabled: true
   api-docs:
     path: /v3/api-docs
     enabled: true
+    
 # ------------------------ Logging ------------------------
 logging:
   level:
