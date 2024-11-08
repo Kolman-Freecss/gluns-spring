@@ -1,5 +1,6 @@
 package org.gluns.glunsspring.shared.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
  * 
  * @version 1.0
  */
+@Getter
 public class GException extends RuntimeException {
     
     final HttpStatus httpStatus;
