@@ -7,14 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 
-import java.util.function.Supplier;
-
 /**
  * BaseController class.
  * Used to define the BaseController object.
  */
 @Slf4j
-public class BaseController {
+public abstract class BaseController {
 
     protected <T> Mono<ResponseEntity<ResponseWrapper<T>>> handleOperation(final Mono<T> monoData,
                                                                            final HttpStatus status,

@@ -11,10 +11,7 @@ import org.gluns.glunsspring.infrastructure.rest.common.BaseController;
 import org.gluns.glunsspring.infrastructure.rest.model.ResponseWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -41,15 +38,15 @@ public class ChatController extends BaseController {
                 "Message chats retrieved successfully");
     }
     
-//    @Operation(summary = "User request an answer", description = "User request an answer")
-//    @ApiResponse(responseCode = "200", description = "User request an answer")
-//    @ApiResponse(responseCode = "500", description = "Error requesting an answer")
-//    @PostMapping("/request")
-//    public Mono<ResponseEntity<ResponseWrapper<ChatMessageDto>>> requestAnswer() {
-//        return handleOperation(this.chatService.requestAnswer(),
-//                HttpStatus.OK,
-//                "User request an answer");
-//    }
+    @Operation(summary = "User request an answer", description = "User request an answer")
+    @ApiResponse(responseCode = "201", description = "User request an answer")
+    @ApiResponse(responseCode = "500", description = "Error requesting an answer")
+    @PostMapping("/request")
+    public Mono<ResponseEntity<ResponseWrapper<ChatMessageDto>>> requestAnswer(@RequestBody final ChatMessageDto chatMessageDto) {
+        return handleOperation(this.chatService.requestAnswer(chatMessageDto),
+                HttpStatus.CREATED,
+                "User request an answer");
+    }
     
 
     @Operation(summary = "Get all contexts", description = "Get all contexts")

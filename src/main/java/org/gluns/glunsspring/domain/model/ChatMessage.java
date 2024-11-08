@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * ChatMessage class.
@@ -30,6 +31,7 @@ public class ChatMessage implements Cloneable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "chat_history_id", nullable = false)
     private long chatHistoryId;
 
     @Column(nullable = false)
@@ -45,15 +47,16 @@ public class ChatMessage implements Cloneable {
     @PrimaryKeyJoinColumn
     private ChatMessage next;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false)
     private ChatUserType userType;
 
     public ChatMessage(final long id,
-                       long chatHistoryId,
-                       String message,
-                       ChatMessage entity,
-                       ChatUserType chatUserType) {
+                       final long chatHistoryId,
+                       final String message,
+                       final ChatMessage entity,
+                       final ChatUserType chatUserType) {
         this.id = id;
         this.chatHistoryId = chatHistoryId;
         this.message = message;
@@ -61,7 +64,10 @@ public class ChatMessage implements Cloneable {
         this.userType = chatUserType;
     }
 
-    public ChatMessage clone(ChatMessage entity) {
+    public ChatMessage clone(final ChatMessage entity) {
+        if (entity == null) {
+            return null;
+        }
         return new ChatMessage(entity.getId(),
                 entity.getChatHistoryId(),
                 entity.getMessage(),

@@ -31,6 +31,17 @@ public class ChatHibernateRepositoryPortImpl implements ChatRepositoryPort {
     }
     
     /**
+     * Save message.
+     * 
+     * @param chatMessage
+     * @return Mono<ChatMessage>
+     */
+    public Mono<ChatMessage> create(final ChatMessage chatMessage) {
+        return Mono.fromCallable(() -> this.chatHibernateRepository.save(chatMessage))
+                .subscribeOn(Schedulers.boundedElastic());
+    }
+    
+    /**
      * Get message by id.
      * 
      * @param id
