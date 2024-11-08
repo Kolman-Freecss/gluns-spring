@@ -4,6 +4,13 @@ spring:
   main:
     web-application-type: reactive
     
+# -------------- OpenAPI --------------
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
 # ------------------------ Logging ------------------------
 logging:
   level:
