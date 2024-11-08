@@ -12,10 +12,10 @@ services:
       ports:
         - "8080:8080"
       depends_on:
-        - keycloack_db
+        - keycloak_db
   keycloak_db:
     build:
-      context: ./keycloack_db
+      context: ./keycloak_db
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
