@@ -39,13 +39,15 @@ public class ChatMessage implements Cloneable {
     @Column(nullable = false)
     private String message;
 
+    // TODO: Make it Lazy
     @Setter
-    @OneToOne(fetch = FetchType.LAZY) // For findById is not necessary to fetch the next message
+    @OneToOne(fetch = FetchType.EAGER) // For findById is not necessary to fetch the next message
     @JoinColumn(name = "previous_message_id")
     private ChatMessage previous;
 
+    // TODO: Make it Lazy
     @Setter
-    @OneToOne(fetch = FetchType.LAZY) // For findById is not necessary to fetch the next message
+    @OneToOne(fetch = FetchType.EAGER) // For findById is not necessary to fetch the next message
     @JoinColumn(name = "next_message_id")
     private ChatMessage next;
 
@@ -58,14 +60,14 @@ public class ChatMessage implements Cloneable {
                        final long chatHistoryId,
                        final ChatContextType contextType,
                        final String message,
-                       final ChatMessage entity,
+                       final ChatMessage previous,
                        final ChatMessage next,
                        final ChatUserType chatUserType) {
         this.id = id;
         this.chatHistoryId = chatHistoryId;
         this.contextType = contextType;
         this.message = message;
-        this.previous = clone(entity);
+        this.previous = clone(previous);
         this.next = clone(next);
         this.userType = chatUserType;
     }

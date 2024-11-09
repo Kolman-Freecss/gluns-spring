@@ -73,4 +73,12 @@ public class ChatHibernateRepositoryPortImpl implements ChatRepositoryPort {
         return Mono.fromCallable(() -> Optional.ofNullable(this.chatHibernateRepository.findLastMessageByChatHistoryId(historyId)))
                 .subscribeOn(Schedulers.boundedElastic());
     }
+
+    /**
+     * Count messages by history id.
+     */
+    public Mono<Integer> countChatMessagesByChatHistoryId(final Long historyId) {
+        return Mono.fromCallable(() -> this.chatHibernateRepository.countByChatHistoryId(historyId))
+                .subscribeOn(Schedulers.boundedElastic());
+    }
 }

@@ -12,7 +12,7 @@
         <Console name="ConsoleClear" target="SYSTEM_OUT">
             <PatternLayout pattern="%m%n"/>
         </Console>
-        <RollingFile name="FileOut" fileName="logs/gateway.log"
+        <RollingFile name="FileOut" fileName="logs/gluns.log"
                      FilePattern="logs/$${date:yyyy-MM}/gluns-%d{dd-MM-yyyy}-%i.log.gz">
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>

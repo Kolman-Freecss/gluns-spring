@@ -1,5 +1,6 @@
 package org.gluns.glunsspring.infrastructure.rest;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import org.gluns.glunsspring.domain.dto.ChatMessageDto;
 import org.gluns.glunsspring.domain.model.ChatContextType;
 import org.gluns.glunsspring.infrastructure.rest.common.BaseController;
 import org.gluns.glunsspring.infrastructure.rest.model.ResponseWrapper;
+import org.gluns.glunsspring.infrastructure.rest.model.Views;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,7 @@ public class ChatController extends BaseController {
     @ApiResponse(responseCode = "200", description = "History chat messages retrieved successfully")
     @ApiResponse(responseCode = "500", description = "Error retrieving message chats")
     @GetMapping("/")
+//    @JsonView(Views.Public.class)
     public Mono<ResponseEntity<ResponseWrapper<List<ChatMessageDto>>>> getHistoryChatMessages() {
         return handleOperation(this.chatService.findAll(),
                 HttpStatus.OK,
@@ -42,6 +45,7 @@ public class ChatController extends BaseController {
     @ApiResponse(responseCode = "201", description = "User request an answer")
     @ApiResponse(responseCode = "500", description = "Error requesting an answer")
     @PostMapping("/request")
+//    @JsonView(Views.Public.class)
     public Mono<ResponseEntity<ResponseWrapper<ChatMessageDto>>> requestAnswer(@RequestBody final ChatMessageDto chatMessageDto) {
         return handleOperation(this.chatService.requestAnswer(chatMessageDto),
                 HttpStatus.CREATED,
@@ -52,6 +56,7 @@ public class ChatController extends BaseController {
     @ApiResponse(responseCode = "200", description = "Chat messages found")
     @ApiResponse(responseCode = "500", description = "Error finding chat messages")
     @GetMapping("/{chatMessageId}")
+//    @JsonView(Views.Internal.class)
     public Mono<ResponseEntity<ResponseWrapper<ChatMessageDto>>> findAllChatMessagesByChatHistoryId(@PathVariable final long chatMessageId) {
         return handleOperation(this.chatService.findById(chatMessageId),
                 HttpStatus.OK,
