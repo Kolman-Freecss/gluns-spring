@@ -44,7 +44,7 @@ logging:
 # ------------------------ keycloak ------------------------
 keycloak:
   realm: realm-test
-  base-uri: ${KEYCLOACK_SERVER:http://localhost:8080/realms/${keycloak.realm}}
+  base-uri: ${KEYCLOAK_SERVER:http://localhost}:8080/realms/${keycloak.realm}
   jwk-set-uri: ${keycloak.base-uri}/protocol/openid-connect/certs
   certs-id: ${KEYCLOACK_REAL_ID:5pzY9Px9dJFUtHDTQHLKrggQidd4p1IbEfSM6e8aZwY}
   token-uri: ${keycloak.base-uri}/protocol/openid-connect/token
