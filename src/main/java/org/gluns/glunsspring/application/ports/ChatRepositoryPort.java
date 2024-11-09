@@ -11,13 +11,13 @@ import java.util.Optional;
  */
 public interface ChatRepositoryPort {
     
-    Mono<List<ChatMessage>> findAll();
+    Mono<List<ChatMessage>> findAll(final String userId);
     
     Mono<ChatMessage> create(final ChatMessage chatMessage);
     
     Mono<ChatMessage> update(final ChatMessage chatMessage);
     
-    Mono<Optional<ChatMessage>> findById(final Long id);
+    Mono<Optional<ChatMessage>> findAllChatMessagesByIdHistoryId(final Long chatHistoryId, final String userId);
     
     Mono<Optional<ChatMessage>> findLastByHistoryId(final Long historyId);
     

@@ -46,10 +46,13 @@ public class ChatService {
     /**
      * Get all chatMessages
      */
-    public Mono<List<ChatMessageDto>> findAll() {
-        return this.chatRepositoryPort.findAll()
+    public Mono<List<ChatMessageDto>> findAll(final String authHeader) {
+        return this.chatRepositoryPort.findAll(this.jwtTokenExtractor.getId(authHeader))
                 .flatMap(chatMessages ->
                         Mono.just(chatMessages.stream().map(c -> {
+                                    // We don't need to return the previous and next messages.
+                                    c.setPrevious(null);
+                                    c.setNext(null);
                                     final Integer depth = this.chatRepositoryPort.countChatMessagesByChatHistoryId(c.getChatHistoryId()).block();
                                     return chatConverter.toDto(c, depth);
                                 })
@@ -99,11 +102,12 @@ public class ChatService {
      * Get chatMessage by id.
      * Retrieves a chat message by its id and pulls all the next messages of the same chat history.
      *
-     * @param id: Long
+     * @param chatHistoryId: Long
      * @return Mono<ChatMessage>
      */
-    public Mono<ChatMessageDto> findById(final Long id) {
-        return this.chatRepositoryPort.findById(id)
+    public Mono<ChatMessageDto> findAllChatMessagesByIdHistoryId(final Long chatHistoryId, 
+                                         final String authHeader) {
+        return this.chatRepositoryPort.findAllChatMessagesByIdHistoryId(chatHistoryId, this.jwtTokenExtractor.getId(authHeader))
                 .flatMap(chatMessage -> {
                     if (chatMessage.isEmpty()) {
                         return Mono.empty();

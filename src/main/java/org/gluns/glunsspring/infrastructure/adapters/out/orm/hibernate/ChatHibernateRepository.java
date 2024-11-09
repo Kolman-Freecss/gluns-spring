@@ -16,8 +16,8 @@ import java.util.List;
 public interface ChatHibernateRepository extends JpaRepository<ChatMessage, Long> {
 
     // JPQL query to get all first messages.
-    @Query("SELECT c FROM ChatMessage c WHERE c.previous IS NULL")
-    List<ChatMessage> findFirstMessages();
+    @Query("SELECT c FROM ChatMessage c WHERE c.previous IS NULL AND c.userId = :userId")
+    List<ChatMessage> findFirstMessages(@Param("userId") final String userId);
 
     // JPQL query to find the last message sent of a chatHistory.
     @Query("SELECT c FROM ChatMessage c LEFT JOIN FETCH c.previous LEFT JOIN FETCH c.next WHERE c.chatHistoryId = :chatHistoryId AND c.next IS NULL")
@@ -25,12 +25,9 @@ public interface ChatHibernateRepository extends JpaRepository<ChatMessage, Long
 
     // JPQL query to retrieve all chat messages by chatMessageId with eager over next messages.
     @Query("SELECT c FROM ChatMessage c " +
-            "LEFT JOIN FETCH c.previous p " +
-            "LEFT JOIN FETCH c.next n " +
-            "LEFT JOIN FETCH p.previous pp " +
-            "LEFT JOIN FETCH n.next nn " +
-            "WHERE c.id = :chatMessageId")
-    ChatMessage findAllMessagesByChatMessageId(@Param("chatMessageId") long chatMessageId);
+            "WHERE c.chatHistoryId = :chatHistoryId AND c.userId = :userId AND c.previous IS NULL ")
+    ChatMessage findAllMessagesByChatMessageId(@Param("chatHistoryId") long chatHistoryId,
+                                               @Param("userId") String userId);
 
     // Query to count the number of messages by chatHistoryId.
     Integer countByChatHistoryId(final long chatHistoryId);

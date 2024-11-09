@@ -3,7 +3,6 @@ package org.gluns.glunsspring.infrastructure.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * WebSecurityConfig

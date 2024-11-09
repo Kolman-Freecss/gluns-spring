@@ -28,18 +28,32 @@ public class ChatController extends BaseController {
 
     private final ChatService chatService;
 
+    /**
+     * Get history of all the chat messages.
+     * Endpoint operation used by the user to get the history of all its conversations.
+     *
+     * @param authHeader
+     */
     @Operation(summary = "Get history of all the chat messages", description = "It pulls all the first messages of all the chat histories")
     @ApiResponse(responseCode = "200", description = "History chat messages retrieved successfully")
     @ApiResponse(responseCode = "500", description = "Error retrieving message chats")
     @GetMapping("")
 //    @JsonView(Views.Public.class)
     public Mono<ResponseEntity<ResponseWrapper<List<ChatMessageDto>>>> getHistoryChatMessages(
+            @RequestHeader("Authorization") String authHeader
     ) {
-        return handleOperation(this.chatService.findAll(),
+        return handleOperation(this.chatService.findAll(authHeader),
                 HttpStatus.OK,
                 "Message chats retrieved successfully");
     }
 
+    /**
+     * Request an answer.
+     * Endpoint operation used by the user to request an answer when the user sends a message.
+     *
+     * @param authHeader
+     * @param chatMessageDto
+     */
     @Operation(summary = "User request an answer", description = "User request an answer")
     @ApiResponse(responseCode = "201", description = "User request an answer")
     @ApiResponse(responseCode = "500", description = "Error requesting an answer")
@@ -54,15 +68,24 @@ public class ChatController extends BaseController {
                 "User request an answer");
     }
 
+    /**
+     * Get all messages by chat history id.
+     * Endpoint operation used by the user to retrieve all messages by chat history id.
+     * When user clicks on a chat history, it will retrieve all the messages of that chat history.
+     * Ex endpoint: /api/v1/chat/1
+     *
+     * @param chatHistoryId
+     */
     @Operation(summary = "Retrieve all messages by chat history id", description = "Retrieve all messages by the parent chat history id")
     @ApiResponse(responseCode = "200", description = "Chat messages found")
     @ApiResponse(responseCode = "500", description = "Error finding chat messages")
-    @GetMapping("/{chatMessageId}")
+    @GetMapping("/{chatHistoryId}")
 //    @JsonView(Views.Internal.class)
     public Mono<ResponseEntity<ResponseWrapper<ChatMessageDto>>> findAllChatMessagesByChatHistoryId(
-            @PathVariable final long chatMessageId
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable final long chatHistoryId
     ) {
-        return handleOperation(this.chatService.findById(chatMessageId),
+        return handleOperation(this.chatService.findAllChatMessagesByIdHistoryId(chatHistoryId, authHeader),
                 HttpStatus.OK,
                 "Chat messages found");
     }
@@ -81,6 +104,7 @@ public class ChatController extends BaseController {
 
     /**
      * Get all messages by chat history id and user id.
+     * Endpoint operation used by Python service to retrieve all messages by chat history id and user id.
      *
      * @param chatHistoryId
      * @param userId

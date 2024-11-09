@@ -25,8 +25,8 @@ public class ChatHibernateRepositoryPortImpl implements ChatRepositoryPort {
      *
      * @return Mono<List < ChatMessage>>
      */
-    public Mono<List<ChatMessage>> findAll() {
-        return Mono.fromCallable(this.chatHibernateRepository::findFirstMessages)
+    public Mono<List<ChatMessage>> findAll(final String userId) {
+        return Mono.fromCallable(() -> this.chatHibernateRepository.findFirstMessages(userId))
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
@@ -40,7 +40,7 @@ public class ChatHibernateRepositoryPortImpl implements ChatRepositoryPort {
         return Mono.fromCallable(() -> this.chatHibernateRepository.save(chatMessage))
                 .subscribeOn(Schedulers.boundedElastic());
     }
-    
+
     /**
      * Update message.
      *
@@ -55,11 +55,12 @@ public class ChatHibernateRepositoryPortImpl implements ChatRepositoryPort {
     /**
      * Get message by id.
      *
-     * @param id
+     * @param chatHistoryId
      * @return Mono<ChatMessage>
      */
-    public Mono<Optional<ChatMessage>> findById(final Long id) {
-        return Mono.fromCallable(() -> Optional.ofNullable(this.chatHibernateRepository.findAllMessagesByChatMessageId(id)))
+    public Mono<Optional<ChatMessage>> findAllChatMessagesByIdHistoryId(final Long chatHistoryId,
+                                                                        final String userId) {
+        return Mono.fromCallable(() -> Optional.ofNullable(this.chatHibernateRepository.findAllMessagesByChatMessageId(chatHistoryId, userId)))
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
@@ -81,7 +82,7 @@ public class ChatHibernateRepositoryPortImpl implements ChatRepositoryPort {
         return Mono.fromCallable(() -> this.chatHibernateRepository.countByChatHistoryId(historyId))
                 .subscribeOn(Schedulers.boundedElastic());
     }
-    
+
     /**
      * Find last by chat history id and user id.
      *

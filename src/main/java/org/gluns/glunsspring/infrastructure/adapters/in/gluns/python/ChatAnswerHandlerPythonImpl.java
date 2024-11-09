@@ -48,7 +48,7 @@ public class ChatAnswerHandlerPythonImpl implements ChatAnswerHandlerPort {
                 })
                 .onErrorMap(throwable -> new GException("Error getting the answer from the Python service", throwable)); // Transforms any error into a GException
 //        return webClient.post()
-//                .uri("/output")
+//                .uri("/api/v1/output")
 //                .bodyValue(chatAnswerPythonRequest)
 //                .retrieve()
 //                .bodyToMono(ChatAnswerPythonResponse.class) // We receive the response from the Python service
