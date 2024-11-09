@@ -7,6 +7,7 @@ import org.gluns.glunsspring.infrastructure.adapters.in.gluns.python.mappers.Cha
 import org.gluns.glunsspring.infrastructure.adapters.in.gluns.python.models.ChatAnswerPythonRequest;
 import org.gluns.glunsspring.infrastructure.adapters.in.gluns.python.models.ChatAnswerPythonResponse;
 import org.gluns.glunsspring.shared.exceptions.GException;
+import org.gluns.glunsspring.shared.utils.DebugApi;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -33,10 +34,18 @@ public class ChatAnswerHandlerPythonImpl implements ChatAnswerHandlerPort {
     @Override
     public Mono<ChatMessage> getAnswer(final ChatMessage chatMessage) {
         final ChatAnswerPythonRequest chatAnswerPythonRequest = new ChatAnswerPythonRequest(
+                chatMessage.getUserId(),
                 chatMessage.getContextType(),
                 chatMessage.getMessage()
         );
-        log.info("Request to Python service. Data: {}", chatAnswerPythonRequest); 
+        log.info("Request to Python service. Data: {}", chatAnswerPythonRequest);
+//        return DebugApi.getMockAnswer()
+//                .map(response -> {
+//                    final ChatMessage responseConverted = converter.toChatMessage(chatMessage, response);
+//                    log.trace("Response converted to ChatMessageDto: {}", responseConverted);
+//                    return responseConverted;
+//                })
+//                .onErrorMap(throwable -> new GException("Error getting the answer from the Python service", throwable)); // Transforms any error into a GException
         return webClient.post()
                 .uri("/output")
                 .bodyValue(chatAnswerPythonRequest)

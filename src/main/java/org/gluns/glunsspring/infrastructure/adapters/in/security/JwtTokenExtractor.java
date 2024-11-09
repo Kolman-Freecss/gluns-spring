@@ -13,7 +13,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @Service
 public class JwtTokenExtractor {
 
-    public String getId(String authHeader) throws Exception {
+    // TODO: Make it async and a model user class
+    public String getId(String authHeader) {
         String userId = "not found";
         String userName = "not found";
         DecodedJWT jwt = JWT.decode(authHeader.replace("Bearer", "").trim());
@@ -31,7 +32,7 @@ public class JwtTokenExtractor {
 
         json.put("userId", userId);
         json.put("userName", userName);
-        return json.toString();
+        return userId;
     }
 
 }

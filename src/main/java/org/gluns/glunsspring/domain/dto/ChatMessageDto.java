@@ -14,6 +14,9 @@ public record ChatMessageDto(
         @Schema(hidden = true)
 //        @JsonView(Views.Public.class)
         long id,
+        @Schema(hidden = true)
+//        @JsonView(Views.Internal.class)
+        String userId,
         @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
 //        @JsonView(Views.Public.class)
         long chatHistoryId,

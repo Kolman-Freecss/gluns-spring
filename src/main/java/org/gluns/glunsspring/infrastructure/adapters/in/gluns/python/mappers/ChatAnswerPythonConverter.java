@@ -22,6 +22,7 @@ public class ChatAnswerPythonConverter {
     public ChatMessage toChatMessage(final ChatMessage parent, final ChatAnswerPythonResponse chatAnswerPythonResponse) {
         return new ChatMessage(
                 0,
+                parent.getUserId(),
                 parent.getChatHistoryId(),
                 parent.getContextType(),
                 chatAnswerPythonResponse.output(),

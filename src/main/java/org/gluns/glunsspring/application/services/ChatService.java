@@ -6,6 +6,7 @@ import org.gluns.glunsspring.application.ports.ChatRepositoryPort;
 import org.gluns.glunsspring.domain.dto.ChatMessageDto;
 import org.gluns.glunsspring.domain.model.ChatContextType;
 import org.gluns.glunsspring.domain.model.ChatMessage;
+import org.gluns.glunsspring.infrastructure.adapters.in.security.JwtTokenExtractor;
 import org.gluns.glunsspring.shared.exceptions.GException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -27,14 +28,19 @@ public class ChatService {
 
     private final ChatConverter chatConverter;
 
-    private ChatAnswerHandlerPort chatAnswerHandlerPort;
+    private final ChatAnswerHandlerPort chatAnswerHandlerPort;
+    
+    private final JwtTokenExtractor jwtTokenExtractor;
 
     public ChatService(@Qualifier("chatHibernateRepositoryPortImpl") final ChatRepositoryPort chatRepositoryPort,
                        final ChatConverter chatConverter,
-                       final ChatAnswerHandlerPort chatAnswerHandlerPort) {
+                       final ChatAnswerHandlerPort chatAnswerHandlerPort,
+                          final JwtTokenExtractor jwtTokenExtractor
+    ) {
         this.chatRepositoryPort = chatRepositoryPort;
         this.chatConverter = chatConverter;
         this.chatAnswerHandlerPort = chatAnswerHandlerPort;
+        this.jwtTokenExtractor = jwtTokenExtractor;
     }
 
     /**
@@ -57,10 +63,13 @@ public class ChatService {
      * @return Mono<ChatMessageDto>
      */
     @Transactional
-    public Mono<ChatMessageDto> requestAnswer(final ChatMessageDto chatMessageDto) {
+    public Mono<ChatMessageDto> requestAnswer(final ChatMessageDto chatMessageDto,
+                                              final String authHeader
+    ) {
         // Always the user is the one who requests an answer.
         ChatMessage userRequest = chatConverter.toEntity(chatMessageDto,
                 this.chatRepositoryPort.countChatMessagesByChatHistoryId(chatMessageDto.chatHistoryId()).block()); // TODO: Make it async
+        userRequest.setUserId(this.jwtTokenExtractor.getId(authHeader));
         userRequest.setUserType(ChatMessage.ChatUserType.USER);
         return saveChatMessage(userRequest)
                 .flatMap(chatMessageSaved -> this.chatAnswerHandlerPort.getAnswer(chatMessageSaved) // Call the AI service to get the answer.
@@ -103,6 +112,33 @@ public class ChatService {
                     return Mono.justOrEmpty(chatConverter.toDto(chatMessage.orElse(null), depth));
                 })
                 .onErrorResume(throwable -> Mono.error(new GException("Error getting chat message by id", throwable, HttpStatus.INTERNAL_SERVER_ERROR)));
+    }
+
+    /**
+     * Get all messages by chat history id and user id.
+     *
+     * @param chatHistoryId: Long
+     * @param userId:        String
+     * @return Mono<List < ChatMessageDto>>
+     */
+    public Mono<ChatMessageDto> findAllMessagesByChatHistoryIdAndUserId(final Long chatHistoryId,
+                                                                        final String userId
+    ) {
+        return this.chatRepositoryPort.findFirstByChatHistoryIdAndUserId(chatHistoryId, userId)
+                .flatMap(chatMessages -> {
+                            if (chatMessages.isEmpty()) {
+                                return Mono.empty();
+                            }
+                            return Mono.just(chatMessages.map(c -> {
+                                                final Integer depth = this.chatRepositoryPort.countChatMessagesByChatHistoryId(c.getChatHistoryId()).block();
+                                                return chatConverter.toDto(c, depth);
+                                            })
+                                            .orElse(null)
+                            );
+                        }
+                )
+                .switchIfEmpty(Mono.empty())
+                .onErrorResume(throwable -> Mono.error(new GException("Error getting all messages by chat history id and user id", throwable, HttpStatus.INTERNAL_SERVER_ERROR)));
     }
 
     // ------------------------------------------------------------------------------------------------

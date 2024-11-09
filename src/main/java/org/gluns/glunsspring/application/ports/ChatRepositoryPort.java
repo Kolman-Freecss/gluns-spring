@@ -23,4 +23,6 @@ public interface ChatRepositoryPort {
     
     Mono<Integer> countChatMessagesByChatHistoryId(final Long chatHistoryId);
     
+    Mono<Optional<ChatMessage>> findFirstByChatHistoryIdAndUserId(final Long chatHistoryId, final String userId);
+    
 }
