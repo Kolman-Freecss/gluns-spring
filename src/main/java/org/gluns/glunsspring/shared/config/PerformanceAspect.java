@@ -28,10 +28,12 @@ public class PerformanceAspect {
         Object retVal = proceedingJoinPoint.proceed();
         long endTime = System.nanoTime();
 
-        String methodName = proceedingJoinPoint.getSignature().getName();
+        final String className = proceedingJoinPoint.getSignature().getDeclaringTypeName();
+        final String methodName = proceedingJoinPoint.getSignature().getName();
 
-        log.info("EXECUTION of method::'{}' took {}ms",
+        log.info("EXECUTION of method::'{}' on class '{}', took '{}' ms",
                 methodName,
+                className,
                 TimeUnit.NANOSECONDS
                         .toMillis(endTime - startTime)
         );
