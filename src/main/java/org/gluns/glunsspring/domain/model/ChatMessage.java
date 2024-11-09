@@ -45,7 +45,7 @@ public class ChatMessage implements Cloneable {
 
     // TODO: Make it Lazy
     @Setter
-    @OneToOne(fetch = FetchType.LAZY) // For findById is not necessary to fetch the next message
+    @OneToOne(fetch = FetchType.EAGER) // For findById is not necessary to fetch the next message
     @JoinColumn(name = "previous_message_id")
     private ChatMessage previous;
 
