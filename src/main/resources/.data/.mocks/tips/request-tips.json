@@ -1,0 +1,26 @@
+[
+  {
+    "context": "CAPITAL_MANAGEMENT",
+    "input": "I want to know how to manage my capital"
+  },
+  {
+    "context": "INVESTMENT",
+    "input": "Which is a nice way to invest my money"
+  },
+  {
+    "context": "SAVE_MONEY",
+    "input": "How can I save money"
+  },
+  {
+    "context": "BILLS_BALANCE",
+    "input": "How can I balance my bills"
+  },
+  {
+    "context": "SUMMARY_INVOICES",
+    "input": "How can I summarize my invoices"
+  },
+  {
+    "context": "CAPITAL_MANAGEMENT",
+    "input": "Actually methods to manage my capital"
+  }
+]
