@@ -40,10 +40,10 @@ public class KeycloakController {
     // TODO: add validation token
 
     @Operation(summary = "Read JWT", description = "Read JWT")
-    @ApiResponse(responseCode = "200", description = "Login OK")
-    @ApiResponse(responseCode = "500", description = "Login error")
+    @ApiResponse(responseCode = "200", description = "Read JWT OK")
+    @ApiResponse(responseCode = "500", description = "Read JWT error")
     @GetMapping(value = "/login/token/id", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Hidden
+    @Hidden // comment this line to expose the endpoint
     public ResponseEntity<?> getUserId(@RequestHeader("Authorization") String authHeader) {
         String userId = "not found";
         try {
