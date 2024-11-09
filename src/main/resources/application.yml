@@ -4,7 +4,7 @@ spring:
   main:
     web-application-type: reactive
   datasource:
-    url: jdbc:mysql://localhost:3306/db_gluns-spring-service
+    url: jdbc:mysql://gluns-spring-mysql:3306/db_gluns-spring-service
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,7 +23,7 @@ server:
 # -------------- External Services Configuration --------------
 gluns:
   python:
-    url: http://localhost:8000
+    url: http://python-back:8000 # http://localhost:8000 | http://gluns-python:8000
 
 # -------------- OpenAPI --------------
 springdoc:

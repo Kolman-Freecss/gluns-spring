@@ -1,13 +1,14 @@
 services:
   
   gluns-spring:
+    container_name: gluns-spring-service
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-gluns-spring-service:3306/db_gluns-spring-service
+      SPRING_DATASOURCE_URL: jdbc:mysql://gluns-spring-mysql:3306/db_gluns-spring-service
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       KEYCLOAK_SERVER: http://keycloak
@@ -15,7 +16,7 @@ services:
       - gluns-spring-mysql
   
   gluns-spring-mysql:
-    container_name: mysql-gluns-spring-service
+    container_name: gluns-spring-mysql
     image: mysql:8.0
     restart: always
     environment:
