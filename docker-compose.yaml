@@ -1,6 +1,7 @@
 services:
   
   gluns-spring:
+    container_name: gluns-spring-service
     build:
       context: .
       dockerfile: Dockerfile
