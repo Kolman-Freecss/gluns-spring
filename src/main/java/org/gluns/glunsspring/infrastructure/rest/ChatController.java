@@ -1,6 +1,5 @@
 package org.gluns.glunsspring.infrastructure.rest;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,6 @@ import org.gluns.glunsspring.domain.dto.ChatMessageDto;
 import org.gluns.glunsspring.domain.model.ChatContextType;
 import org.gluns.glunsspring.infrastructure.rest.common.BaseController;
 import org.gluns.glunsspring.infrastructure.rest.model.ResponseWrapper;
-import org.gluns.glunsspring.infrastructure.rest.model.Views;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

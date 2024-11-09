@@ -1,6 +1,7 @@
 package org.gluns.glunsspring.application.services;
 
 import org.gluns.glunsspring.application.mappers.ChatConverter;
+import org.gluns.glunsspring.application.ports.ChatAnswerHandlerPort;
 import org.gluns.glunsspring.application.ports.ChatRepositoryPort;
 import org.gluns.glunsspring.domain.dto.ChatMessageDto;
 import org.gluns.glunsspring.domain.model.ChatContextType;
@@ -26,10 +27,14 @@ public class ChatService {
 
     private final ChatConverter chatConverter;
 
+    private ChatAnswerHandlerPort chatAnswerHandlerPort;
+
     public ChatService(@Qualifier("chatHibernateRepositoryPortImpl") final ChatRepositoryPort chatRepositoryPort,
-                       final ChatConverter chatConverter) {
+                       final ChatConverter chatConverter,
+                       final ChatAnswerHandlerPort chatAnswerHandlerPort) {
         this.chatRepositoryPort = chatRepositoryPort;
         this.chatConverter = chatConverter;
+        this.chatAnswerHandlerPort = chatAnswerHandlerPort;
     }
 
     /**
@@ -53,31 +58,14 @@ public class ChatService {
      */
     @Transactional
     public Mono<ChatMessageDto> requestAnswer(final ChatMessageDto chatMessageDto) {
-        // TODO: Call the AI service to get the answer.
         // Always the user is the one who requests an answer.
         ChatMessage userRequest = chatConverter.toEntity(chatMessageDto,
                 this.chatRepositoryPort.countChatMessagesByChatHistoryId(chatMessageDto.chatHistoryId()).block()); // TODO: Make it async
         userRequest.setUserType(ChatMessage.ChatUserType.USER);
-        return this.chatRepositoryPort.findLastByHistoryId(chatMessageDto.chatHistoryId())
-                .flatMap(parentMessage -> {
-                    // If the parent message is found, set it as the previous message.
-                    if (parentMessage.isPresent()) {
-                        ChatMessage parent = parentMessage.get();
-
-                        // Init entities (to avoid LazyInitializationException)
-                        parent.getNext();
-                        userRequest.getPrevious();
-
-                        parent.setNext(userRequest);
-                        userRequest.setPrevious(parent);
-
-                        return this.chatRepositoryPort.create(userRequest)
-                                .then(this.chatRepositoryPort.update(parent));
-                    } else {
-                        // If the parent message is not found, set the user request as the first message.
-                        return this.chatRepositoryPort.create(userRequest);
-                    }
-                })
+        return saveChatMessage(userRequest)
+                .flatMap(chatMessageSaved -> this.chatAnswerHandlerPort.getAnswer(chatMessageSaved) // Call the AI service to get the answer.
+                        .flatMap(this::saveChatMessage)
+                )
                 .flatMap(chatMessage -> Mono.just(chatConverter.toDto(chatMessage, this.chatRepositoryPort.countChatMessagesByChatHistoryId(chatMessageDto.chatHistoryId()).block())))
                 .subscribeOn(Schedulers.boundedElastic()) // Ensures are executed on a separate thread where the transaction is open
                 .onErrorResume(throwable -> {
@@ -115,6 +103,44 @@ public class ChatService {
                     return Mono.justOrEmpty(chatConverter.toDto(chatMessage.orElse(null), depth));
                 })
                 .onErrorResume(throwable -> Mono.error(new GException("Error getting chat message by id", throwable, HttpStatus.INTERNAL_SERVER_ERROR)));
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    /**
+     * ##########################################
+     * ############## PRIVATE METHODS ###########
+     * ##########################################
+     */
+    // ------------------------------------------------------------------------------------------------
+
+    /**
+     * Save chat message.
+     *
+     * @param chatMessage: ChatMessage
+     * @return Mono<ChatMessage>
+     */
+    private Mono<ChatMessage> saveChatMessage(final ChatMessage chatMessage) {
+        return this.chatRepositoryPort.findLastByHistoryId(chatMessage.getChatHistoryId())
+                .flatMap(parentMessage -> {
+                    // If the parent message is found, set it as the previous message.
+                    if (parentMessage.isPresent()) {
+                        final ChatMessage parent = parentMessage.get();
+
+                        // Init entities (to avoid LazyInitializationException)
+                        parent.getNext();
+                        chatMessage.getPrevious();
+
+                        parent.setNext(chatMessage);
+                        chatMessage.setPrevious(parent);
+
+                        return this.chatRepositoryPort.create(chatMessage)
+                                .then(this.chatRepositoryPort.update(parent));
+                    } else {
+                        // If the parent message is not found, set the user request as the first message.
+                        return this.chatRepositoryPort.create(chatMessage);
+                    }
+                })
+                .onErrorResume(throwable -> Mono.error(new GException("Error saving chat message", throwable, HttpStatus.INTERNAL_SERVER_ERROR)));
     }
 
 }

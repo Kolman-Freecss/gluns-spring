@@ -1,13 +1,7 @@
 package org.gluns.glunsspring.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.gluns.glunsspring.domain.model.ChatContextType;
-import org.gluns.glunsspring.domain.model.ChatMessage;
-import org.gluns.glunsspring.infrastructure.rest.model.Views;
-
-import java.util.Optional;
 
 /**
  * ChatMessageDto class.
@@ -40,7 +34,7 @@ public record ChatMessageDto(
         @Schema(hidden = true)
 //        @Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 //        @JsonView(Views.Internal.class)
-        ChatMessage.ChatUserType userType
+        org.gluns.glunsspring.domain.model.ChatMessage.ChatUserType userType
 ) {
 
 //    @JsonIgnore

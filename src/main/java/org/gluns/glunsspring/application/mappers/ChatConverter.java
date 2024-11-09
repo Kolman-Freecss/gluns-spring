@@ -4,7 +4,6 @@ import lombok.NoArgsConstructor;
 import org.gluns.glunsspring.domain.dto.ChatMessageDto;
 import org.gluns.glunsspring.domain.model.ChatMessage;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * ChatConverter
