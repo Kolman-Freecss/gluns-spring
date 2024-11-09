@@ -11,7 +11,7 @@ import org.gluns.glunsspring.domain.model.ChatContextType;
 public record ChatAnswerPythonRequest(
         long chatHistoryId,
         String userId,
-        ChatContextType contextType,
+        ChatContextType context,
         String input
 ) {
 }

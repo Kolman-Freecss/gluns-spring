@@ -40,7 +40,8 @@ public class ChatMessage implements Cloneable {
     @Column(name = "context_type", nullable = false)
     private ChatContextType contextType;
 
-    @Column(nullable = false)
+    @Lob // Large Object
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String message;
 
     // TODO: Make it Lazy

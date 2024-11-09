@@ -40,23 +40,23 @@ public class ChatAnswerHandlerPythonImpl implements ChatAnswerHandlerPort {
                 chatMessage.getMessage()
         );
         log.info("Request to Python service. Data: {}", chatAnswerPythonRequest);
-        return DebugApi.getMockAnswer()
-                .map(response -> {
-                    final ChatMessage responseConverted = converter.toChatMessage(chatMessage, response);
-                    log.trace("Response converted to ChatMessageDto: {}", responseConverted);
-                    return responseConverted;
-                })
-                .onErrorMap(throwable -> new GException("Error getting the answer from the Python service", throwable)); // Transforms any error into a GException
-//        return webClient.post()
-//                .uri("/api/v1/output")
-//                .bodyValue(chatAnswerPythonRequest)
-//                .retrieve()
-//                .bodyToMono(ChatAnswerPythonResponse.class) // We receive the response from the Python service
+//        return DebugApi.getMockAnswer()
 //                .map(response -> {
 //                    final ChatMessage responseConverted = converter.toChatMessage(chatMessage, response);
 //                    log.trace("Response converted to ChatMessageDto: {}", responseConverted);
 //                    return responseConverted;
 //                })
 //                .onErrorMap(throwable -> new GException("Error getting the answer from the Python service", throwable)); // Transforms any error into a GException
+        return webClient.post()
+                .uri("/api/v1/output")
+                .bodyValue(chatAnswerPythonRequest)
+                .retrieve()
+                .bodyToMono(ChatAnswerPythonResponse.class) // We receive the response from the Python service
+                .map(response -> {
+                    final ChatMessage responseConverted = converter.toChatMessage(chatMessage, response);
+                    log.trace("Response converted to ChatMessageDto: {}", responseConverted);
+                    return responseConverted;
+                })
+                .onErrorMap(throwable -> new GException("Error getting the answer from the Python service", throwable)); // Transforms any error into a GException
     }
 }
