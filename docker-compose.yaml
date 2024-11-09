@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8084:8084"
+      - "8083:8083"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-gluns-spring-service:3306/db_gluns-spring-service
       SPRING_DATASOURCE_USERNAME: root

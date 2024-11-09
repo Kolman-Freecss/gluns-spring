@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Copy pom.xml and download dependencies
 COPY pom.xml .
-RUN mvn dependency:go-offline
+#RUN mvn dependency:go-offline
 
 # Copy the source code and compile
 COPY src ./src
@@ -21,7 +21,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Expose the application port
-EXPOSE 8080
+EXPOSE 8083
 
 # Start the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
