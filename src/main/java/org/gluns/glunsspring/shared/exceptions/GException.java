@@ -1,5 +1,6 @@
 package org.gluns.glunsspring.shared.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
  * 
  * @version 1.0
  */
+@Getter
 public class GException extends RuntimeException {
     
     final HttpStatus httpStatus;
@@ -19,6 +21,13 @@ public class GException extends RuntimeException {
         super(message, cause);
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         apiMessage = "Server error";
+    }
+    
+    public GException(final String message, 
+                       final HttpStatus httpStatus) {
+        super(message);
+        this.httpStatus = httpStatus;
+        this.apiMessage = message;
     }
     
     public GException(final String message, 

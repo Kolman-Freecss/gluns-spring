@@ -1,4 +1,30 @@
 services:
+  
+  gluns-spring:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-gluns-spring-service:3306/db_gluns-spring-service
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - gluns-spring-mysql
+  
+  gluns-spring-mysql:
+    container_name: mysql-gluns-spring-service
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: db_gluns-spring-service
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+  
   keycloak:
       build:
         context: ./keycloak
@@ -13,6 +39,7 @@ services:
         - "8080:8080"
       depends_on:
         - keycloak_db
+        
   keycloak_db:
     build:
       context: ./keycloak_db
@@ -24,6 +51,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+        
   pgadmin4:
     build:
       context: ./database_client
@@ -38,3 +66,4 @@ services:
 
 volumes:
   postgres_data:
+  mysql-data:
