@@ -28,6 +28,10 @@ public class ChatMessage implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    
+    @Setter
+    @Column(name = "user_id", nullable = false)
+    private String userId; // From Keycloak
 
     @Column(name = "chat_history_id", nullable = false)
     private long chatHistoryId;
@@ -41,7 +45,7 @@ public class ChatMessage implements Cloneable {
 
     // TODO: Make it Lazy
     @Setter
-    @OneToOne(fetch = FetchType.EAGER) // For findById is not necessary to fetch the next message
+    @OneToOne(fetch = FetchType.LAZY) // For findById is not necessary to fetch the next message
     @JoinColumn(name = "previous_message_id")
     private ChatMessage previous;
 
@@ -57,6 +61,7 @@ public class ChatMessage implements Cloneable {
     private ChatUserType userType;
 
     public ChatMessage(final long id,
+                          final String userId,
                        final long chatHistoryId,
                        final ChatContextType contextType,
                        final String message,
@@ -64,24 +69,26 @@ public class ChatMessage implements Cloneable {
                        final ChatMessage next,
                        final ChatUserType chatUserType) {
         this.id = id;
+        this.userId = userId;
         this.chatHistoryId = chatHistoryId;
         this.contextType = contextType;
         this.message = message;
-        this.previous = clone(previous);
-        this.next = clone(next);
+        this.previous = clone(previous, 1);
+        this.next = clone(next, 1);
         this.userType = chatUserType;
     }
 
-    public ChatMessage clone(final ChatMessage entity) {
-        if (entity == null) {
+    public ChatMessage clone(final ChatMessage entity, final int depth) {
+        if (entity == null || depth <= -1) {
             return null;
         }
         return new ChatMessage(entity.getId(),
+                entity.getUserId(),
                 entity.getChatHistoryId(),
                 entity.getContextType(),
                 entity.getMessage(),
-                entity.getPrevious(),
-                entity.getNext(),
+                clone(entity.getPrevious(), depth - 1),
+                clone(entity.getNext(), depth - 1),
                 entity.getUserType());
     }
 

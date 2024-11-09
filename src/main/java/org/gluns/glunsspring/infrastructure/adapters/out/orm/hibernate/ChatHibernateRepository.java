@@ -34,5 +34,9 @@ public interface ChatHibernateRepository extends JpaRepository<ChatMessage, Long
 
     // Query to count the number of messages by chatHistoryId.
     Integer countByChatHistoryId(final long chatHistoryId);
+    
+    // JPQL query to find the last message sent by a user in a chatHistory.
+    @Query("SELECT c FROM ChatMessage c WHERE c.chatHistoryId = :chatHistoryId AND c.userId = :userId AND c.previous IS NULL")    
+    ChatMessage findFirstByChatHistoryIdAndUserId(final long chatHistoryId, final String userId);
 
 }

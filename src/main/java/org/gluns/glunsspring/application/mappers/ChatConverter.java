@@ -4,7 +4,6 @@ import lombok.NoArgsConstructor;
 import org.gluns.glunsspring.domain.dto.ChatMessageDto;
 import org.gluns.glunsspring.domain.model.ChatMessage;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * ChatConverter
@@ -17,7 +16,8 @@ public class ChatConverter {
         if (chatMessage == null || depth <= -1) {
             return null;
         }
-        return new ChatMessageDto(chatMessage.getId(), 
+        return new ChatMessageDto(chatMessage.getId(),
+                chatMessage.getUserId(),
                 chatMessage.getChatHistoryId(),
                 chatMessage.getContextType(),
                 chatMessage.getMessage(), 
@@ -31,6 +31,7 @@ public class ChatConverter {
             return null;
         }
         return new ChatMessage(chatMessageDto.id(),
+                chatMessageDto.userId(),
                 chatMessageDto.chatHistoryId(),
                 chatMessageDto.contextType(),
                 chatMessageDto.message(),

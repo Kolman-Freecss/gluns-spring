@@ -13,14 +13,16 @@ public interface ChatRepositoryPort {
     
     Mono<List<ChatMessage>> findAll();
     
-    Mono<ChatMessage> create(final ChatMessage chatMessageDto);
+    Mono<ChatMessage> create(final ChatMessage chatMessage);
     
-    Mono<ChatMessage> update(final ChatMessage chatMessageDto);
+    Mono<ChatMessage> update(final ChatMessage chatMessage);
     
     Mono<Optional<ChatMessage>> findById(final Long id);
     
     Mono<Optional<ChatMessage>> findLastByHistoryId(final Long historyId);
     
     Mono<Integer> countChatMessagesByChatHistoryId(final Long chatHistoryId);
+    
+    Mono<Optional<ChatMessage>> findFirstByChatHistoryIdAndUserId(final Long chatHistoryId, final String userId);
     
 }

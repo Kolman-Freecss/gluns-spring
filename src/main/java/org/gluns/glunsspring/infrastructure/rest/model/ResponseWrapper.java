@@ -1,7 +1,5 @@
 package org.gluns.glunsspring.infrastructure.rest.model;
 
-import org.springframework.http.HttpStatus;
-
 /**
  * ResponseWrapper
  * Used to define the ResponseWrapper object.
