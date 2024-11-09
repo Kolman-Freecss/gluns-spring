@@ -34,6 +34,7 @@ public class ChatAnswerHandlerPythonImpl implements ChatAnswerHandlerPort {
     @Override
     public Mono<ChatMessage> getAnswer(final ChatMessage chatMessage) {
         final ChatAnswerPythonRequest chatAnswerPythonRequest = new ChatAnswerPythonRequest(
+                chatMessage.getChatHistoryId(),
                 chatMessage.getUserId(),
                 chatMessage.getContextType(),
                 chatMessage.getMessage()
