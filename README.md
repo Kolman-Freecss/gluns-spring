@@ -2,6 +2,8 @@
 
 Service built to work as core microservice for Gluns-Bank project.
 
+<img src="gluns-bank-logo.png" alt="Gluns Logo" width="400" />
+
 ## Index
 - [Useful Links](#useful-links)
   - [Project Resources](#project-resources)
@@ -16,6 +18,7 @@ Service built to work as core microservice for Gluns-Bank project.
 - [Infrastructure](#infrastructure)
 - [Configuration](#configuration)
   - [Keycloak Configuration](#keycloak-configuration)
+- [Flows](#flows)
 
 ## Useful Links
 
@@ -111,6 +114,12 @@ Diagram Flow:
     - Password: `password`
     - Map Roles to the users: `USER` and `ADMIN`
 
+
+## Flows
+
+User Chat Flow:
+
+![User Chat Flow](User-chat-flow-overview.svg)
 
 ---
 
