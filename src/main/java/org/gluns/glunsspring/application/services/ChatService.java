@@ -65,8 +65,8 @@ public class ChatService {
         return saveChatMessage(userRequest)
                 .flatMap(chatMessageSaved -> this.chatAnswerHandlerPort.getAnswer(chatMessageSaved) // Call the AI service to get the answer.
                         .flatMap(this::saveChatMessage)
+                        .flatMap(chatMessage -> Mono.just(chatConverter.toDto(chatMessage, 1))) // TODO: This method is unperformant because of EAGER way -> this.chatRepositoryPort.countChatMessagesByChatHistoryId(chatMessageDto.chatHistoryId()).block()
                 )
-                .flatMap(chatMessage -> Mono.just(chatConverter.toDto(chatMessage, this.chatRepositoryPort.countChatMessagesByChatHistoryId(chatMessageDto.chatHistoryId()).block())))
                 .subscribeOn(Schedulers.boundedElastic()) // Ensures are executed on a separate thread where the transaction is open
                 .onErrorResume(throwable -> {
                     if (throwable instanceof GException) {

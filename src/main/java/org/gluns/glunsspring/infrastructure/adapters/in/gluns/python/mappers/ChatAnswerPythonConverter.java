@@ -14,19 +14,19 @@ public class ChatAnswerPythonConverter {
     /**
      * Convert the ChatAnswerPythonResponse to ChatMessage
      * Always the ChatUserType will be BOT
-     * @param original ChatMessage
+     * @param parent ChatMessage
      * @param chatAnswerPythonResponse ChatAnswerPythonResponse
      * @return ChatMessage
      * @see ChatMessage
      */
-    public ChatMessage toChatMessage(final ChatMessage original, final ChatAnswerPythonResponse chatAnswerPythonResponse) {
+    public ChatMessage toChatMessage(final ChatMessage parent, final ChatAnswerPythonResponse chatAnswerPythonResponse) {
         return new ChatMessage(
-                original.getId(),
-                original.getChatHistoryId(),
-                original.getContextType(),
+                0,
+                parent.getChatHistoryId(),
+                parent.getContextType(),
                 chatAnswerPythonResponse.output(),
-                original.getPrevious(),
-                original.getNext(),
+                parent,
+                null,
                 ChatMessage.ChatUserType.BOT
         );
     }

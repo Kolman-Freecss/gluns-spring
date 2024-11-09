@@ -67,21 +67,21 @@ public class ChatMessage implements Cloneable {
         this.chatHistoryId = chatHistoryId;
         this.contextType = contextType;
         this.message = message;
-        this.previous = clone(previous);
-        this.next = clone(next);
+        this.previous = clone(previous, 1);
+        this.next = clone(next, 1);
         this.userType = chatUserType;
     }
 
-    public ChatMessage clone(final ChatMessage entity) {
-        if (entity == null) {
+    public ChatMessage clone(final ChatMessage entity, final int depth) {
+        if (entity == null || depth <= -1) {
             return null;
         }
         return new ChatMessage(entity.getId(),
                 entity.getChatHistoryId(),
                 entity.getContextType(),
                 entity.getMessage(),
-                entity.getPrevious(),
-                entity.getNext(),
+                clone(entity.getPrevious(), depth - 1),
+                clone(entity.getNext(), depth - 1),
                 entity.getUserType());
     }
 

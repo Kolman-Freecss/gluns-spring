@@ -9,6 +9,7 @@ import org.gluns.glunsspring.domain.model.ChatContextType;
  * @version 1.0
  */
 public record ChatAnswerPythonRequest(
+        String userId,
         ChatContextType contextType,
         String input
 ) {

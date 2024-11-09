@@ -31,7 +31,7 @@ public class ChatController extends BaseController {
     @Operation(summary = "Get history of all the chat messages", description = "It pulls all the first messages of all the chat histories")
     @ApiResponse(responseCode = "200", description = "History chat messages retrieved successfully")
     @ApiResponse(responseCode = "500", description = "Error retrieving message chats")
-    @GetMapping("/")
+    @GetMapping("")
 //    @JsonView(Views.Public.class)
     public Mono<ResponseEntity<ResponseWrapper<List<ChatMessageDto>>>> getHistoryChatMessages() {
         return handleOperation(this.chatService.findAll(),
