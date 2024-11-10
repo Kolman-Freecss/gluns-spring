@@ -2,7 +2,7 @@
 
 Service built to work as core microservice for Gluns-Bank project.
 
-<img src="gluns-bank-logo.png" alt="Gluns Logo" width="400" />
+<img src="gluns-bank-logo.svg" alt="Gluns Logo" width="350" />
 
 ## Index
 - [Useful Links](#useful-links)
