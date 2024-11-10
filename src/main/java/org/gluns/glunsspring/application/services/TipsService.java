@@ -3,14 +3,13 @@ package org.gluns.glunsspring.application.services;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.gluns.glunsspring.application.factory.TipRequestDummy;
 import org.gluns.glunsspring.application.ports.TipsHandlerPort;
 import org.gluns.glunsspring.domain.dto.TipsAnswerDto;
 import org.gluns.glunsspring.domain.model.ChatContextType;
 import org.gluns.glunsspring.infrastructure.adapters.in.gluns.python.models.TipsAnswerPythonRequest;
 import org.gluns.glunsspring.infrastructure.adapters.in.security.JwtTokenExtractor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -20,11 +19,11 @@ import java.util.List;
  * DashboardService class.
  * Used to define the DashboardService object.
  */
+@Slf4j
 @AllArgsConstructor
 @Service
 public class TipsService {
 
-    private static final Logger log = LoggerFactory.getLogger(TipsService.class);
     private final TipsHandlerPort tipsHandlerPort;
     
     private final JwtTokenExtractor jwtTokenExtractor;
